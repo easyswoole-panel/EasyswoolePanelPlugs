@@ -1,0 +1,20 @@
+{
+    "name": "siam/plugs",
+    "type": "library",
+    "description": "EasySwoole Panel's plugs basic support",
+    "keywords": [
+        "easyswoole panel",
+        "easyswoole plugs"
+    ],
+    "homepage": "https://www.easyswoole.com/",
+    "license": "Apache-2.0",
+    "authors": [
+        {
+            "name": "Siam",
+            "email": "59419979@qq.com"
+        }
+    ],
+    "require": {
+        "easyswoole/easyswoole": "3.4.1",
+    }
+}
