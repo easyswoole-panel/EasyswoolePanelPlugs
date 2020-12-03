@@ -9,7 +9,9 @@
 namespace Siam\Plugs\controller;
 
 
-use App\HttpController\Common\Services\PlugsAuthService;
+use Siam\Plugs\model\PlugsInstalledModel;
+use Siam\Plugs\service\PlugsAuthService;
+use Siam\Plugs\service\PlugsInstallService;
 use EasySwoole\Http\AbstractInterface\Controller;
 
 class Plugs extends BasePlugsController
@@ -27,41 +29,65 @@ class Plugs extends BasePlugsController
         foreach ($vendorList as $vendorName  => $vendorVersion){
             if (PlugsAuthService::isPlugs($vendorName)){
                 $return[$vendorName] = PlugsAuthService::getPlugsConfig($vendorName);
+                $info = PlugsInstalledModel::create()->getByPlugsName($vendorName);
+                $return[$vendorName]['installed'] = !!$info;
+                $return[$vendorName]['installed_version'] = !!$info ? $info->plugs_version : null;
             }
         }
-        // todo 从数据库判断是否已经安装
 
         return $this->writeJson(200, $return);
     }
 
     /**
-     * TODO 通过插件名 扫描运行包内的install逻辑
+     * 通过插件名 扫描运行包内的install逻辑
      */
     public function install()
     {
-        $vendorName = "siam/testPlugs";
+        $vendorName = $this->request()->getQueryParam("plugs_name");
         if (!PlugsAuthService::isPlugs($vendorName)){
             return $this->writeJson('500', [], '不是合法插件');
         }
 
-        $config = PlugsAuthService::getPlugsConfig($vendorName);
+        $config    = PlugsAuthService::getPlugsConfig($vendorName);
         $namespace = $config['namespace'];
         $version   = $config['version'];
-        // TODO 对比数据库是否安装过 版本号
-
-        // 运行database脚本
-        $installFilePath = PlugsAuthService::plugsPath($vendorName)."/src/database/install_{$version}.php";
-        if (!is_file($installFilePath)){
-            return $this->writeJson('500',[],'安装脚本不存在');
+        // 对比数据库是否安装过 版本号
+        $installedInfo = PlugsInstalledModel::create()->getByPlugsName($vendorName);
+        if (!!$installedInfo){
+            return $this->writeJson('500', [], '已经安装过');
         }
+
         try{
-            require $installFilePath;
+            // 运行database脚本
+            PlugsInstallService::install($vendorName, true);
+            $lastVersion = PlugsInstallService::getLastVersion($vendorName);
         }catch (\Throwable $e){
             return $this->writeJson('500', [], $e->getMessage());
         }
+        PlugsInstalledModel::create()->updateVersionByName($vendorName, $lastVersion);
 
         return $this->writeJson('200', [], '安装成功');
+    }
 
+    public function update()
+    {
+        $vendorName = $this->request()->getQueryParam("plugs_name");
+        if (!PlugsAuthService::isPlugs($vendorName)){
+            return $this->writeJson('500', [], '不是合法插件');
+        }
+
+        // 根据旧版本 调用解析逻辑 得到需要执行到脚本 依次执行
+        try{
+            // 运行database脚本
+            PlugsInstallService::install($vendorName);
+            $lastVersion = PlugsInstallService::getLastVersion($vendorName);
+        }catch (\Throwable $e){
+            return $this->writeJson('500', [], $e->getMessage());
+        }
+        PlugsInstalledModel::create()->updateVersionByName($vendorName, $lastVersion);
+
+
+        return $this->writeJson('200', [], '更新成功');
     }
 
 }

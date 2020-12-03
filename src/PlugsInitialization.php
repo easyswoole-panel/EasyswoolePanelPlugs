@@ -14,13 +14,13 @@ class PlugsInitialization
      * @api /api/plugs/install
      * @api /api/plugs/update
      * @api /api/plugs/remove
-     *
      */
     public static function init()
     {
         PlugsHelper::getInstance()->addGetRouter([
             '/api/plugs/get_list' => [new Plugs, 'get_list'],
             '/api/plugs/install'  => [new Plugs, 'install'],
+            '/api/plugs/update'   => [new Plugs, 'update'],
         ]);
     }
 }
