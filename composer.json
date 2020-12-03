@@ -15,7 +15,7 @@
         }
     ],
     "require": {
-        "easyswoole/easyswoole": "3.4.1",
+        "easyswoole/easyswoole": "3.4.1"
     },
     "autoload": {
         "psr-4": {
