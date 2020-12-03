@@ -6,7 +6,7 @@
         "easyswoole panel",
         "easyswoole plugs"
     ],
-    "homepage": "https://www.easyswoole.com/",
+    "homepage": "https://www.siammm.cn/",
     "license": "Apache-2.0",
     "authors": [
         {
@@ -16,5 +16,10 @@
     ],
     "require": {
         "easyswoole/easyswoole": "3.4.1",
+    },
+    "autoload": {
+        "psr-4": {
+            "Siam\\Plugs\\" : "src/"
+        }
     }
 }
