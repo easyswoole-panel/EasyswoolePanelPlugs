@@ -22,5 +22,6 @@ class PlugsInitialization
             '/api/plugs/install'  => [new Plugs, 'install'],
             '/api/plugs/update'   => [new Plugs, 'update'],
         ]);
+        PlugsHelper::getInstance()->mirateView("siam/plugs","list.html");
     }
 }

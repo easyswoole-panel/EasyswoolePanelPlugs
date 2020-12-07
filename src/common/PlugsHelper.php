@@ -30,7 +30,6 @@ class PlugsHelper
         $routeCollector = \EasySwoole\EasySwoole\Http\Dispatcher::getInstance()->initRouter()->getRouteCollector();
 
         foreach ($array as $key => $runner){
-            EventHelper::registerWithAdd();
             $routeCollector->get($key, function(Request $request, Response $response) use($runner){
                 DispatcherPlugs::getInstance()->run($runner[0], $runner[1],$request, $response);
             });
@@ -45,6 +44,15 @@ class PlugsHelper
     {
         $fullFilePath   = PlugsAuthService::plugsPath($plugsName)."src/view/".$fileName;
         $mirateFilePath = EASYSWOOLE_ROOT."/public/nepadmin/views/{$plugsName}/$fileName";
+        $mirateFileDir = EASYSWOOLE_ROOT."/public/nepadmin/views/{$plugsName}";
+
+        if (!is_file($fullFilePath)){
+            var_dump("file error");
+            return false;
+        }
+        if (!is_dir($mirateFileDir)){
+            File::createDirectory($mirateFileDir);
+        }
 
         $res = File::copyFile($fullFilePath, $mirateFilePath);
         return $res;
