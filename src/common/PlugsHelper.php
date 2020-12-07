@@ -24,6 +24,11 @@ class PlugsHelper
 {
     use Singleton;
 
+    /**
+     * 动态注入路由
+     * @param $array
+     * @param AbstractRouter $router
+     */
     public function addGetRouter($array,AbstractRouter $router)
     {
         $routeCollector = $router->getRouteCollector();
@@ -55,5 +60,34 @@ class PlugsHelper
 
         $res = File::copyFile($fullFilePath, $mirateFilePath);
         return $res;
+    }
+
+    /**
+     * TODO 是否包含某个插件
+     * @param $plugsName
+     */
+    public function hasPlugs($plugsName)
+    {
+
+    }
+
+    /**
+     * 获取插件配置
+     * @param $plugsName
+     */
+    public function getConfig($plugsName)
+    {
+
+    }
+
+    /**
+     * TODO 新增菜单
+     * @param $menuName
+     * @param $menuPath
+     * @param $menuIcon
+     */
+    public function addMenu($menuName, $menuPath, $menuIcon)
+    {
+        
     }
 }
