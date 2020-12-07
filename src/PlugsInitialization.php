@@ -5,6 +5,8 @@ namespace Siam\Plugs;
 
 use Siam\Plugs\common\PlugsHelper;
 use Siam\Plugs\controller\Plugs;
+use EasySwoole\Http\AbstractInterface\AbstractRouter;
+
 
 class PlugsInitialization
 {
@@ -15,13 +17,13 @@ class PlugsInitialization
      * @api /api/plugs/update
      * @api /api/plugs/remove
      */
-    public static function init()
+    public static function init(AbstractRouter $router)
     {
         PlugsHelper::getInstance()->addGetRouter([
             '/api/plugs/get_list' => [new Plugs, 'get_list'],
             '/api/plugs/install'  => [new Plugs, 'install'],
             '/api/plugs/update'   => [new Plugs, 'update'],
-        ]);
+        ], $router);
         PlugsHelper::getInstance()->mirateView("siam/plugs","list.html");
     }
 }

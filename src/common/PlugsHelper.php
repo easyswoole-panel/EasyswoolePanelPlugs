@@ -19,15 +19,14 @@ use Siam\Plugs\common\DispatcherPlugs;
 use Siam\Plugs\controller\Plugs;
 use Siam\Plugs\service\PlugsAuthService;
 use Siam\Plugs\service\PlugsInstallService;
-
+use EasySwoole\Http\AbstractInterface\AbstractRouter;
 class PlugsHelper
 {
     use Singleton;
 
-    public function addGetRouter($array)
+    public function addGetRouter($array,AbstractRouter $router)
     {
-        /** @var \FastRoute\RouteCollector $routeCollector */
-        $routeCollector = \EasySwoole\EasySwoole\Http\Dispatcher::getInstance()->initRouter()->getRouteCollector();
+        $routeCollector = $router->getRouteCollector();
 
         foreach ($array as $key => $runner){
             $routeCollector->get($key, function(Request $request, Response $response) use($runner){
