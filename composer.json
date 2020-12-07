@@ -14,9 +14,6 @@
             "email": "59419979@qq.com"
         }
     ],
-    "require": {
-        "easyswoole/easyswoole": "*"
-    },
     "autoload": {
         "psr-4": {
             "Siam\\Plugs\\" : "src/"
