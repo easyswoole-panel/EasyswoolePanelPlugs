@@ -67,7 +67,7 @@ class PlugsHelper
         $mirateFileDir = EASYSWOOLE_ROOT."/public/nepadmin/views/{$plugsName}";
 
         if (!is_file($fullFilePath)){
-            var_dump("file error");
+            echo "{$plugsName} -> {$fileName} not exist \n";
             return false;
         }
         if (!is_dir($mirateFileDir)){
@@ -76,6 +76,23 @@ class PlugsHelper
 
         $res = File::copyFile($fullFilePath, $mirateFilePath);
         return $res;
+    }
+
+    /**
+     * 迁移包内所有view文件到前端public中
+     * @param $file
+     */
+    public function mirateViewAll($plugsName)
+    {
+        $fullFileDir   = PlugsAuthService::plugsPath($plugsName)."src/view/";
+        $mirateFileDir = EASYSWOOLE_ROOT."/public/nepadmin/views/{$plugsName}";
+
+        $fileList = File::scanDirectory($fullFileDir);
+        foreach ( $fileList['files'] as $file ){
+            if (!is_dir($fullFileDir)) File::createDirectory($fullFileDir);
+            $realyFileName = str_replace($fullFileDir, "", $file);
+            File::copyFile($file, $mirateFileDir."/".$realyFileName);
+        }
     }
 
     /**

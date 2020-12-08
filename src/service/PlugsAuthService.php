@@ -9,6 +9,8 @@
 namespace Siam\Plugs\service;
 
 
+use Siam\Plugs\model\PlugsInstalledModel;
+
 class PlugsAuthService
 {
     const configName = "esPlugsConfig.php";
@@ -45,5 +47,38 @@ class PlugsAuthService
             return require $fullPath;
         }
         return null;
+    }
+
+    /**
+     * 获取插件列表
+     * @param boolean $installed
+     */
+    public static function getAllPlugs($installed = false)
+    {
+        $composerFile = file_get_contents(EASYSWOOLE_ROOT."/composer.json");
+        $composerFile = json_decode($composerFile, TRUE);
+        $vendorList   = $composerFile['require'];
+
+        $return = [];
+        foreach ($vendorList as $vendorName  => $vendorVersion){
+            if (PlugsAuthService::isPlugs($vendorName)){
+                $temp = PlugsAuthService::getPlugsConfig($vendorName);
+                $info = PlugsInstalledModel::create()->getByPlugsName($vendorName);
+                if ($installed && !!$info){
+                    $temp['installed'] = !!$info;
+                    $temp['installed_version'] = !!$info ? $info->plugs_version : null;
+                    $temp['plugs_name'] = $vendorName;
+
+                    $return[] = $temp;
+                }else{
+                    $temp['installed'] = !!$info;
+                    $temp['installed_version'] = !!$info ? $info->plugs_version : null;
+                    $temp['plugs_name'] = $vendorName;
+
+                    $return[] = $temp;
+                }
+            }
+        }
+        return $return;
     }
 }
