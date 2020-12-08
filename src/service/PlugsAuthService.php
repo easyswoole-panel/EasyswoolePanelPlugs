@@ -44,7 +44,9 @@ class PlugsAuthService
 
         if (is_file($vendorPath.static::configName)){
             $fullPath =  $vendorPath.static::configName;
-            return require $fullPath;
+            $temp = require $fullPath;
+            $temp['plugs_path'] = $vendorPath;
+            return $temp;
         }
         return null;
     }

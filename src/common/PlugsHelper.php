@@ -42,12 +42,18 @@ class PlugsHelper
 
     /**
      * 动态注入路由 GET POST
-     * @param $array
+     * @param string|array $array
+     * @param null $callable 处理回调
      * @param AbstractRouter $router
      */
-    public function addAnyRouter($array,AbstractRouter $router)
+    public function addAnyRouter($array, $callable = null)
     {
+        $router = PlugsContain::$router;
         $routeCollector = $router->getRouteCollector();
+        // 兼容注入单条 字符
+        if (!is_array($array)){
+            return $routeCollector->addRoute(["GET", "POST"], $array, $callable);
+        }
 
         foreach ($array as $key => $runner){
             $routeCollector->addRoute(["GET", "POST"], $key, function(Request $request, Response $response) use($runner){

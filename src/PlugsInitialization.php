@@ -4,6 +4,7 @@ namespace Siam\Plugs;
 
 
 use EasySwoole\EasySwoole\ServerManager;
+use Siam\Plugs\common\PlugsContain;
 use Siam\Plugs\common\PlugsHelper;
 use Siam\Plugs\controller\Plugs;
 use EasySwoole\Http\AbstractInterface\AbstractRouter;
@@ -19,21 +20,34 @@ class PlugsInitialization
      * @api /api/plugs/update
      * @api /api/plugs/remove
      */
-    public static function init(AbstractRouter $router)
+    public static function initPlugsRouter(AbstractRouter $router)
     {
         PlugsHelper::getInstance()->addAnyRouter([
             '/api/plugs/get_list' => [new Plugs, 'get_list'],
             '/api/plugs/install'  => [new Plugs, 'install'],
             '/api/plugs/update'   => [new Plugs, 'update'],
-        ], $router);
+        ]);
 
-        // 将所有已经安装到插件到view 部署到前端（git 忽略）
-//        if (ServerManager::getInstance()->getSwooleServer()->worker_id == 1){
-            $plugsList = PlugsAuthService::getAllPlugs(true);
-            foreach ($plugsList as $plug){
-                PlugsHelper::getInstance()->mirateViewAll($plug['plugs_name']);
+    }
+
+    /**
+     * 初始化插件系统  主要是处理其他插件
+     */
+    public static function initPlugsSystem()
+    {
+        $plugsList = PlugsAuthService::getAllPlugs(true);
+
+        foreach ($plugsList as $plug){
+            // 将所有已经安装到插件到view 部署到前端（git 忽略）
+            PlugsHelper::getInstance()->mirateViewAll($plug['plugs_name']);
+
+            // 运行所有初始化文件
+            $initializationFilePath = $plug['plugs_path']."/src/PlugsInitialization.php";
+            if  ( is_file($initializationFilePath) ) {
+                require_once $initializationFilePath;
             }
-//        }
+
+        }
 
     }
 }
