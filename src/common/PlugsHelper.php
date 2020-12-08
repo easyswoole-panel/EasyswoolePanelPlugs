@@ -41,6 +41,22 @@ class PlugsHelper
     }
 
     /**
+     * 动态注入路由 GET POST
+     * @param $array
+     * @param AbstractRouter $router
+     */
+    public function addAnyRouter($array,AbstractRouter $router)
+    {
+        $routeCollector = $router->getRouteCollector();
+
+        foreach ($array as $key => $runner){
+            $routeCollector->addRoute(["GET", "POST"], $key, function(Request $request, Response $response) use($runner){
+                DispatcherPlugs::getInstance()->run($runner[0], $runner[1],$request, $response);
+            });
+        }
+    }
+
+    /**
      * 迁移包内view文件到前端public中
      * @param $file
      */

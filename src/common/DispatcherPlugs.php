@@ -26,6 +26,7 @@ class DispatcherPlugs
         $response->withHeader('Content-type', 'application/json;charset=utf-8');
         try{
             $controllerObject->__hook($actionName,$request,$response);
+            $response->end();
         }catch (\Throwable $throwable){
             $this->hookThrowable($throwable,$request,$response);
         }

@@ -21,6 +21,9 @@ class Plugs extends BasePlugsController
      */
     public function get_list()
     {
+        $page = $this->request()->getQueryParam('page') ?? 1;
+        $limit = $this->request()->getQueryParam('limit') ?? 10;
+
         $composerFile = file_get_contents(EASYSWOOLE_ROOT."/composer.json");
         $composerFile = json_decode($composerFile, TRUE);
         $vendorList   = $composerFile['require'];
@@ -28,12 +31,20 @@ class Plugs extends BasePlugsController
         $return = [];
         foreach ($vendorList as $vendorName  => $vendorVersion){
             if (PlugsAuthService::isPlugs($vendorName)){
-                $return[$vendorName] = PlugsAuthService::getPlugsConfig($vendorName);
+                $temp = PlugsAuthService::getPlugsConfig($vendorName);
                 $info = PlugsInstalledModel::create()->getByPlugsName($vendorName);
-                $return[$vendorName]['installed'] = !!$info;
-                $return[$vendorName]['installed_version'] = !!$info ? $info->plugs_version : null;
+                $temp['installed'] = !!$info;
+                $temp['installed_version'] = !!$info ? $info->plugs_version : null;
+                $temp['plugs_name'] = $vendorName;
+
+                $return[] = $temp;
             }
         }
+        // 分页支持
+        $return = [
+            'total' => count($return),
+            'list'  => array_slice($return, ($page - 1) * $limit, $limit)
+        ];
 
         return $this->writeJson(200, $return);
     }

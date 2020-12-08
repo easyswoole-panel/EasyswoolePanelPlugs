@@ -19,7 +19,7 @@ class PlugsInitialization
      */
     public static function init(AbstractRouter $router)
     {
-        PlugsHelper::getInstance()->addGetRouter([
+        PlugsHelper::getInstance()->addAnyRouter([
             '/api/plugs/get_list' => [new Plugs, 'get_list'],
             '/api/plugs/install'  => [new Plugs, 'install'],
             '/api/plugs/update'   => [new Plugs, 'update'],
