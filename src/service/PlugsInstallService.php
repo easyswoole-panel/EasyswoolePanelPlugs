@@ -34,11 +34,13 @@ class PlugsInstallService
         }else{
             $installFileList = static::getInstallFIle($plugsName);
         }
+        if ($installFileList === []) return false;
         
         foreach ($installFileList as $installFile){
             // run install
             require $installFile;
         }
+        return true;
     }
 
     /**
@@ -51,6 +53,7 @@ class PlugsInstallService
     public static function getInstallFIle($plugsName, $startVersion = null, $endVersion = null)
     {
         $return = static::getPlugsVersionList($plugsName);
+        if ($return === []) return $return;
         $installFilePath = PlugsAuthService::plugsPath($plugsName)."/src/database/";
 
         $finalReturn = [];
@@ -82,8 +85,12 @@ class PlugsInstallService
         $version   = $config['version'];
         // 获取到起点和终点版本到文件列表
         $installFilePath = PlugsAuthService::plugsPath($plugsName)."/src/database/";
+        if (!is_dir($installFilePath)) return [];
+
         $allInstallFile = File::scanDirectory($installFilePath);
         $allInstallFile = $allInstallFile["files"];
+        if (count($allInstallFile) <= 0) return [];
+
         $return = [];
         foreach ($allInstallFile as $oneFile){
             $str = str_replace($installFilePath."install_", "", $oneFile);

@@ -27,17 +27,26 @@ class PlugsHelper
     /**
      * 动态注入路由
      * @param $array
-     * @param AbstractRouter $router
+     * @param null $callable
+     * @return bool
      */
-    public function addGetRouter($array,AbstractRouter $router)
+    public function addGetRouter($array, $callable = null)
     {
+        $router = PlugsContain::$router;
         $routeCollector = $router->getRouteCollector();
 
+        // 兼容注入单条 字符
+        if (!is_array($array)){
+            $routeCollector->addRoute(["GET"], $array, $callable);
+            return true;
+        }
+
         foreach ($array as $key => $runner){
-            $routeCollector->get($key, function(Request $request, Response $response) use($runner){
+            $routeCollector->addRoute(["GET"], $key, function(Request $request, Response $response) use($runner){
                 DispatcherPlugs::getInstance()->run($runner[0], $runner[1],$request, $response);
             });
         }
+        return true;
     }
 
     /**

@@ -56,7 +56,10 @@ class Plugs extends BasePlugsController
 
         try{
             // 运行database脚本
-            PlugsInstallService::install($vendorName, true);
+            $res = PlugsInstallService::install($vendorName, true);
+            if (!$res) {
+                return $this->writeJson("500", [], "安装失败");
+            }
             $lastVersion = PlugsInstallService::getLastVersion($vendorName);
         }catch (\Throwable $e){
             return $this->writeJson('500', [], $e->getMessage());
