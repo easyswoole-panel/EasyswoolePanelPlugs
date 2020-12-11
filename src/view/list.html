@@ -191,10 +191,10 @@
                             '<p class="apply-desc">'+data[i].des+'</p>\n' ;
                         //根据应用状态显示按钮
                         if(data[i].installed==true){
-                            html+= '<span class="layui-badge apply-stop" data-id="'+data[i].id+'">主页</span> ' ;
+                            html+= '<span class="layui-badge view-home" data-id="'+data[i].plugs_name+'">主页</span> ' ;
                             // html+='<span class="layui-badge layui-bg-gray apply-uninstall" data-id="'+data[i].id+'">卸载</span>\n';
                         }else{
-                            html+='<span class="layui-badge layui-bg-green apply-install" data-id="'+data[i].id+'">启用</span>'
+                            html+='<span class="layui-badge layui-bg-green apply-install" data-id="'+data[i].plugs_name+'">启用</span>'
                         }
                         html+= '</div></div>';
                     });
@@ -225,17 +225,32 @@
         }
 
         //停用应用
-        $(document).on('click','.apply-stop',function () {
+        view.on('click','.apply-stop',function () {
             var id =$(this).attr('data-id')
             layer.msg('停用应用ID：'+id)
         })
-        //安装应用
-        $(document).on('click','.apply-install',function () {
+        view.on('click','.view-home',function () {
             var id =$(this).attr('data-id')
-            layer.msg('安装应用ID：'+id)
+            layer.msg('主页：'+id)
+        })
+        //安装应用
+        view.on('click','.apply-install',function (e) {
+            var id =$(this).attr('data-id');
+            console.log("bug" + id);
+            return false;
+
+            admin.post({
+                url: 'plugs/install',
+                data:{
+                    plugs_name: id,
+                },
+                success:function (res) {
+                    layer.msg(res.msg);
+                }
+            });
         })
         //卸载应用
-        $(document).on('click','.apply-uninstall',function () {
+        view.on('click','.apply-uninstall',function () {
 
             var id =$(this).attr('data-id')
             layer.msg('卸载应用ID：'+id)

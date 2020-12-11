@@ -21,8 +21,8 @@ class Plugs extends BasePlugsController
      */
     public function get_list()
     {
-        $page = $this->request()->getQueryParam('page') ?? 1;
-        $limit = $this->request()->getQueryParam('limit') ?? 10;
+        $page = $this->request()->getRequestParam('page') ?? 1;
+        $limit = $this->request()->getRequestParam('limit') ?? 10;
 
         $return = PlugsAuthService::getAllPlugs();
 
@@ -40,7 +40,7 @@ class Plugs extends BasePlugsController
      */
     public function install()
     {
-        $vendorName = $this->request()->getQueryParam("plugs_name");
+        $vendorName = $this->request()->getRequestParam("plugs_name");
         if (!PlugsAuthService::isPlugs($vendorName)){
             return $this->writeJson('500', [], '不是合法插件');
         }
@@ -71,7 +71,7 @@ class Plugs extends BasePlugsController
 
     public function update()
     {
-        $vendorName = $this->request()->getQueryParam("plugs_name");
+        $vendorName = $this->request()->getRequestParam("plugs_name");
         if (!PlugsAuthService::isPlugs($vendorName)){
             return $this->writeJson('500', [], '不是合法插件');
         }

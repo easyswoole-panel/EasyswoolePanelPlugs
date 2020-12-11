@@ -3,6 +3,7 @@
 namespace Siam\Plugs;
 
 
+use EasySwoole\Component\TableManager;
 use EasySwoole\EasySwoole\ServerManager;
 use Siam\Plugs\common\PlugsContain;
 use Siam\Plugs\common\PlugsHelper;
@@ -35,18 +36,23 @@ class PlugsInitialization
      */
     public static function initPlugsSystem()
     {
-        $plugsList = PlugsAuthService::getAllPlugs(true);
+        // run only once
+        $table = TableManager::getInstance()->get('plugs_status');
+        if ($table->get('1')['init_ed'] == 1){
+            return ;
+        }
+        $table->incr('1', 'init_ed');
 
+
+        $plugsList = PlugsAuthService::getAllPlugs(true);
         foreach ($plugsList as $plug){
             // 将所有已经安装到插件到view 部署到前端（git 忽略）
             PlugsHelper::getInstance()->mirateViewAll($plug['plugs_name']);
-
             // 运行所有初始化文件
             $initializationFilePath = $plug['plugs_path']."/src/PlugsInitialization.php";
             if  ( is_file($initializationFilePath) ) {
                 require_once $initializationFilePath;
             }
-
         }
 
     }
