@@ -236,8 +236,6 @@
         //安装应用
         view.on('click','.apply-install',function (e) {
             var id =$(this).attr('data-id');
-            console.log("bug" + id);
-            return false;
 
             admin.post({
                 url: 'plugs/install',
