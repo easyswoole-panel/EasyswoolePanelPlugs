@@ -1,6 +1,6 @@
 <?php
 /**
- * 插件基础支持
+ * 插件 路由 助手
  * User: Siam
  * Date: 2020/12/2 0002
  * Time: 22:09
@@ -20,7 +20,7 @@ use Siam\Plugs\controller\Plugs;
 use Siam\Plugs\service\PlugsAuthService;
 use Siam\Plugs\service\PlugsInstallService;
 use EasySwoole\Http\AbstractInterface\AbstractRouter;
-class PlugsHelper
+class PlugsRouterHelper
 {
     use Singleton;
 
