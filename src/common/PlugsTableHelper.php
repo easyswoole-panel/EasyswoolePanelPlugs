@@ -20,12 +20,12 @@ class PlugsTableHelper
     /**
      *
      * @param string $table 表名(不带前缀)
-     * @param mixed $callable DDL闭包
+     * @param callable $callable DDL回调
      * @throws \EasySwoole\ORM\Exception\Exception
      * @throws \Throwable
      * Author:chrisQx
      */
-    function create(string $table, $callable)
+    function create(string $table, callable $callable)
     {
         //检查前缀
         $prefix     = Config::getInstance()->getConf('MYSQL.prefix');
