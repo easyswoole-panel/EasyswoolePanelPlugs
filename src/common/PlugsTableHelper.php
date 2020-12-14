@@ -18,14 +18,14 @@ class PlugsTableHelper
     use Singleton;
 
     /**
-     *
+     * Author:chrisQx
      * @param string $table 表名(不带前缀)
      * @param callable $callable DDL回调
+     * @return bool
      * @throws \EasySwoole\ORM\Exception\Exception
      * @throws \Throwable
-     * Author:chrisQx
      */
-    function create(string $table, callable $callable)
+    function create(string $table, callable $callable): bool
     {
         //检查前缀
         $prefix     = Config::getInstance()->getConf('MYSQL.prefix');
