@@ -21,7 +21,6 @@ class PlugsTableHelper
      *
      * @param string $table 表名(不带前缀)
      * @param mixed $callable DDL闭包
-     * @param string $connection 数据库连接(默认default)
      * @throws \EasySwoole\ORM\Exception\Exception
      * @throws \Throwable
      * Author:chrisQx
