@@ -110,32 +110,4 @@ class PlugsRouterHelper
         }
     }
 
-    /**
-     * TODO 是否包含某个插件
-     * @param $plugsName
-     */
-    public function hasPlugs($plugsName)
-    {
-
-    }
-
-    /**
-     * 获取插件配置
-     * @param $plugsName
-     */
-    public function getConfig($plugsName)
-    {
-
-    }
-
-    /**
-     * TODO 新增菜单
-     * @param $menuName
-     * @param $menuPath
-     * @param $menuIcon
-     */
-    public function addMenu($menuName, $menuPath, $menuIcon)
-    {
-        
-    }
 }
