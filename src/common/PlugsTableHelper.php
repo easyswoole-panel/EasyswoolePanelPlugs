@@ -19,6 +19,7 @@ class PlugsTableHelper
 
     /**
      * Author:chrisQx
+     * 创建表
      * @param string $table 表名(不带前缀)
      * @param callable $callable DDL回调
      * @return bool
@@ -31,10 +32,10 @@ class PlugsTableHelper
         $prefix     = Config::getInstance()->getConf('MYSQL.prefix');
         $tableName  = "{$prefix}{$table}";
         //检查表是否存在
-        $TableSql   = "SHOW TABLES LIKE '{$prefix}{$table}'";
+        $TableSql   = "SHOW TABLES LIKE '{$tableName}'";
         $queryBuild = new QueryBuilder();
         $queryBuild->raw($TableSql);
-        $checkTable = DbManager::getInstance()->query($queryBuild, true, 'default')->getResult();
+        $checkTable = DbManager::getInstance()->query($queryBuild, true)->getResult();
         if($checkTable){
             throw new \Exception("表{$tableName}已存在");
         }
@@ -44,17 +45,43 @@ class PlugsTableHelper
             $callable($table);
         });
         $queryBuild->raw($sql);
-        $create = DbManager::getInstance()->query($queryBuild, true, 'default')->getResult();//bool
+        $create = DbManager::getInstance()->query($queryBuild, true)->getResult();//bool
         if(!$create){
             throw new \Exception("表{$tableName}创建失败");
         }
         return $create;
     }
 
-    // TODO 删除表
-    function drop($tableName)
-    {
 
+    /**
+     * Author:chrisQx
+     * 删除表
+     * @param string $tableName 表名(不带前缀)
+     * @return bool
+     * @throws \EasySwoole\ORM\Exception\Exception
+     * @throws \Throwable
+     */
+    function drop(string $tableName): bool
+    {
+        //检查前缀
+        $prefix     = Config::getInstance()->getConf('MYSQL.prefix');
+        $tableName  = "{$prefix}{$tableName}";
+        //检查表是否存在
+        $TableSql   = "SHOW TABLES LIKE '{$tableName}'";
+        $queryBuild = new QueryBuilder();
+        $queryBuild->raw($TableSql);
+        $checkTable = DbManager::getInstance()->query($queryBuild, true)->getResult();
+        if(!$checkTable){
+            throw new \Exception("预备删除的表{$tableName}不存在");
+        }
+        //执行sql
+        $sql = "DROP TABLE {$tableName}";
+        $queryBuild->raw($sql);
+        $drop = DbManager::getInstance()->query($queryBuild, true)->getResult();//bool
+        if(!$drop){
+            throw new \Exception("表{$tableName}删除失败");
+        }
+        return $drop;
     }
 
 }
