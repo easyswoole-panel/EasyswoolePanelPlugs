@@ -50,7 +50,7 @@ class PlugsBackupHelper
      * @param $backupFilePath
      * @return bool
      */
-    public function delete($backupFilePath)
+    public function delete($backupFilePath) : bool
     {
        return File::deleteDirectory($backupFilePath);
     }
