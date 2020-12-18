@@ -26,34 +26,23 @@ class PlugsBackupHelper
         $backPath = EASYSWOOLE_ROOT.'/backup/'.$vendorName;
         $filePath =  $backPath.'/'.$backupFileName;
 
-        if(file_exists($backPath)){
-            $data['dirPath'] = $backPath;
-
-            //创建相关文件,如果文件不存在
-            if($backupFileName && !file_exists($filePath)){
-                $createFile = File::touchFile($filePath);
-                if(!$createFile){
-                    throw new \Exception("文件{$backupFileName}创建失败");
-                }
-            }
-            $data['fileName'] = $backupFileName;
-        }else{
+        if(!file_exists($backPath)){
             //初始化创建
             $createDir = File::createDirectory($backPath);
             if(!$createDir){
                 throw new \Exception("文件夹{$backPath}创建失败");
-
             }
-            $data['dirPath'] = $backPath;
-            $createFile = File::touchFile($filePath);
-            if(!$createFile){
-                throw new \Exception("文件{$backupFileName}创建失败");
-            }
-            $data['fileName'] = $backupFileName;
-
+        }
+        //文件
+        $createFile = File::touchFile($filePath);
+        if(!$createFile){
+            throw new \Exception("文件{$backupFileName}创建失败");
         }
 
-        return $data;
+        $pathInfo['dirPath'] = $backPath;
+        $pathInfo['fileName'] = $backupFileName;
+
+        return $pathInfo;
 
     }
 
