@@ -21,16 +21,15 @@ class PlugsBackupHelper
      */
     public function create(string $vendorName, string $backupFileName) : array
     {
-        // TODO return file path
         //检查相关文件夹
-        $backPath = EASYSWOOLE_ROOT.'/backup/'.$vendorName;
-        $filePath =  $backPath.'/'.$backupFileName;
+        $backupPath = EASYSWOOLE_ROOT.'/backup/'.$vendorName;
+        $filePath =  $backupPath.'/'.$backupFileName;
 
-        if(!file_exists($backPath)){
+        if(!file_exists($backupPath)){
             //初始化创建
-            $createDir = File::createDirectory($backPath);
+            $createDir = File::createDirectory($backupPath);
             if(!$createDir){
-                throw new \Exception("文件夹{$backPath}创建失败");
+                throw new \Exception("文件夹{$backupPath}创建失败");
             }
         }
         //文件
@@ -39,7 +38,7 @@ class PlugsBackupHelper
             throw new \Exception("文件{$backupFileName}创建失败");
         }
 
-        $pathInfo['dirPath'] = $backPath;
+        $pathInfo['dirPath'] = $backupPath;
         $pathInfo['fileName'] = $backupFileName;
 
         return $pathInfo;
