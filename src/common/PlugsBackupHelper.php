@@ -45,8 +45,13 @@ class PlugsBackupHelper
 
     }
 
+    /**
+     * 删除文件夹
+     * @param $backupFilePath
+     * @return bool
+     */
     public function delete($backupFilePath)
     {
-
+       return File::deleteDirectory($backupFilePath);
     }
 }
