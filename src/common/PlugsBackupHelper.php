@@ -45,8 +45,13 @@ class PlugsBackupHelper
 
     }
 
-    public function delete($backupFilePath)
+    /**
+     * 删除文件
+     * @param $backupFilePath
+     * @return bool
+     */
+    public function delete($backupFilePath) : bool
     {
-
+       return unlink($backupFilePath);
     }
 }
