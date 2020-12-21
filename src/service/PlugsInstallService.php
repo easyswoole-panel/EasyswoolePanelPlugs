@@ -82,7 +82,7 @@ class PlugsInstallService
     {
         $config = PlugsAuthService::getPlugsConfig($plugsName);
         $namespace = $config['namespace'];
-        $version   = $config['version'];
+
         // 获取到起点和终点版本到文件列表
         $installFilePath = PlugsAuthService::plugsPath($plugsName)."/src/database/";
         if (!is_dir($installFilePath)) return [];
