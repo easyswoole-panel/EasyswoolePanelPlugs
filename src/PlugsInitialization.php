@@ -27,6 +27,7 @@ class PlugsInitialization
             '/api/plugs/get_list' => [new Plugs, 'get_list'],
             '/api/plugs/install'  => [new Plugs, 'install'],
             '/api/plugs/update'   => [new Plugs, 'update'],
+            '/api/plugs/remove'   => [new Plugs, 'remove'],
         ]);
 
     }

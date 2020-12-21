@@ -90,4 +90,30 @@ class Plugs extends BasePlugsController
         return $this->writeJson('200', [], '更新成功');
     }
 
+    /**
+     * 卸载插件api
+     * @return mixed
+     */
+    public function remove()
+    {
+        $vendorName = $this->request()->getRequestParam("plugs_name");
+        if (!PlugsAuthService::isPlugs($vendorName)){
+            return $this->writeJson('500', [], '不是合法插件');
+        }
+        // 禁止卸载
+        $cannotRemove = ['siam/plugs'];
+        if (in_array($vendorName, $cannotRemove)){
+            return $this->writeJson('500', [], "该插件禁止卸载");
+        }
+
+        try {
+            $path = PlugsInstallService::getRemoveFilePath($vendorName);
+            require $path;
+        } catch (\Exception $e) {
+            return $this->writeJson('500', [], $e->getMessage());
+        }
+
+        return $this->writeJson('200', [], '卸载成功');
+    }
+
 }
