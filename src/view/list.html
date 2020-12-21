@@ -62,6 +62,8 @@
         var total = 0; //应用列表数
         var page =1; //默认第一页
         var limit=12; //每页显示条数
+        var list = {};
+
         getData({page:page,limit:limit}); //加载数据
         renderPage(page,limit,total); //分页渲染
         form.render();
@@ -83,7 +85,9 @@
                     total =res.result.total;
                     var data =res.result.list;
                     var html='';
+                    list = {};
                     $.each(data,function(i){
+                        list[data[i].plugs_name] = i;
                         html+=' <div class="layui-col-xs6 layui-col-sm3 layui-col-cm2 layui-col-lg2  " > <div class="layui-card apply-card" style="text-align: center">\n' +
                             '<img src="'+data[i].logo+'"class="apply-logo">\n' +
                             '<p class="apply-title"> '+data[i].name+' '+ data[i].installed_version+'</p>\n' +
@@ -127,19 +131,14 @@
             });
         }
 
-        //停用应用
-        view.on('click','.apply-stop',function () {
-            var id =$(this).attr('data-id')
-            layer.msg('停用应用ID：'+id)
-        })
         view.on('click','.view-home',function () {
             var id =$(this).attr('data-id')
-            layer.msg('主页：'+id)
+            let info = list[id];
+            // todo 读取内部配置，是打开新页面到主页还是后台嵌套页
         })
         //安装应用
         view.on('click','.apply-install',function (e) {
             var id =$(this).attr('data-id');
-
             admin.post({
                 url: 'plugs/install',
                 data:{
@@ -153,12 +152,6 @@
                     }
                 }
             });
-        })
-        //卸载应用
-        view.on('click','.apply-uninstall',function () {
-
-            var id =$(this).attr('data-id')
-            layer.msg('卸载应用ID：'+id)
         })
 
         // 更新应用
