@@ -94,7 +94,7 @@
                         if(data[i].installed==true){
                             html+= '<span class="layui-badge view-home" data-id="'+data[i].plugs_name+'">主页</span> <br/>' ;
                             html+= '<span class="layui-badge layui-bg-6ab3b0 apply-update" data-id="'+data[i].plugs_name+'">更新</span> ' ;
-                            html+='<span class="layui-badge layui-bg-gray apply-uninstall" data-id="'+data[i].id+'">卸载</span>\n';
+                            html+='<span class="layui-badge layui-bg-gray apply-uninstall" data-id="'+data[i].plugs_name+'">卸载</span>\n';
                         }else{
                             html+='<span class="layui-badge layui-bg-green apply-install" data-id="'+data[i].plugs_name+'">启用</span>'
                         }
@@ -166,6 +166,24 @@
             let id =$(this).attr('data-id')
             admin.post({
                 url: 'plugs/update',
+                data:{
+                    plugs_name: id,
+                },
+                success:function (res) {
+                    layer.msg(res.msg);
+                    if (res.code ==='200'){
+                        getData({page:page,limit:limit}); //加载数据
+                        renderPage(page,limit,total); //分页渲染
+                    }
+                }
+            });
+        });
+
+        // 卸载应用
+        view.on("click", ".apply-uninstall", function(){
+            let id =$(this).attr('data-id')
+            admin.post({
+                url: 'plugs/remove',
                 data:{
                     plugs_name: id,
                 },

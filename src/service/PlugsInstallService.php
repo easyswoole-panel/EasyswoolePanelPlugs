@@ -113,4 +113,19 @@ class PlugsInstallService
         $end = end($versionList);
         return $end;
     }
+
+    /**
+     * 获取卸载脚本路径
+     * @param $plugsName
+     * @return string
+     * @throws \Exception
+     */
+    public static function getRemoveFilePath($plugsName)
+    {
+        $filePath = PlugsAuthService::plugsPath($plugsName)."/src/database/remove.php";
+        if (!is_file($filePath)){
+            throw new \Exception("{$plugsName} has not remove file.");
+        }
+        return $filePath;
+    }
 }
