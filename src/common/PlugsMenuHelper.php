@@ -26,9 +26,9 @@ class PlugsMenuHelper
             'auth_name'   => $menuName,
             'auth_rules'  => $menuPath ?? '0',
             'auth_icon'   => $menuIcon ?? '',
-            'auth_type'   => '0',
-            'create_time' => '0',
-            'update_time' => '0',
+            'auth_type'   => '1',
+            'create_time' => time(),
+            'update_time' => time(),
         ];
         $model = new AuthModel($data);
         $rs = $model->save();
