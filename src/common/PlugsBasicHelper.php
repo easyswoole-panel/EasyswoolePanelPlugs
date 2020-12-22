@@ -21,17 +21,17 @@ class PlugsBasicHelper
      */
     public function hasPlugs(string $plugsName)
     {
-        //插件包是否存在
+        //插件包是否存在。
         $has = PlugsAuthService::isPlugs($plugsName);
         if(!$has){
             return false;
         };
-        //插件存在，检查是否安装
+        //插件存在，检查是否安装。
         $plugs = PlugsInstalledModel::create()->getByPlugsName($plugsName);
         if (empty($plugs)){
             return false;
         };
-        //返回安装信息
+        //返回安装信息。
         return [
             'plugs_name'=>$plugs->plugs_name,
             'install_version'=>$plugs->plugs_version
