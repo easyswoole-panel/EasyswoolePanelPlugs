@@ -14,7 +14,7 @@ class PlugsMenuHelper
     use Singleton;
 
     /**
-     * TODO 新增菜单 参照panel主库 新增权限的逻辑
+     * 新增菜单 参照panel主库 新增权限的逻辑
      * @param $menuName
      * @param $menuPath
      * @param $menuIcon
