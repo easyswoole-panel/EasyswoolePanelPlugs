@@ -37,14 +37,6 @@ class PlugsInitialization
      */
     public static function initPlugsSystem()
     {
-        // run only once
-        $table = TableManager::getInstance()->get('plugs_status');
-        if ($table->get('1')['init_ed'] == 1){
-            return ;
-        }
-        $table->incr('1', 'init_ed');
-
-
         $plugsList = PlugsAuthService::getAllPlugs(true);
         foreach ($plugsList as $plug){
             // 将所有已经安装到插件到view 部署到前端（git 忽略）
