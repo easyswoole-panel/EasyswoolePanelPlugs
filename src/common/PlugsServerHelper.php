@@ -31,7 +31,8 @@ class PlugsServerHelper extends Server
      */
     public function reload()
     {
-        exec("php easyswoole server reload > reload.log");
+        $path = EASYSWOOLE_ROOT;
+        exec("cd {$path} && php easyswoole server reload > {$path}/reload.log &");
     }
 
     /**
