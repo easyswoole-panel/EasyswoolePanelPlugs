@@ -27,6 +27,14 @@ class PlugsServerHelper extends Server
     }
 
     /**
+     * 热重启easyswoole服务.，此处为热重启，可以用于更新worker start后才加载的文件（业务逻辑），主进程（如配置文件）不会被重启。
+     */
+    public function reload()
+    {
+        exec("php easyswoole server reload > reload.log");
+    }
+
+    /**
      * 重启easyswoole服务
      */
     public function restart()
