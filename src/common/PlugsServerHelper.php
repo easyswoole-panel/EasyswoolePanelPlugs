@@ -23,7 +23,17 @@ class PlugsServerHelper extends Server
      */
     public function stop()
     {
+        $path = EASYSWOOLE_ROOT;
+        exec("cd {$path} && php easyswoole server stop >> {$path}/Log/swoole.log &");
+    }
 
+    /**
+     * 热重启easyswoole服务.，此处为热重启，可以用于更新worker start后才加载的文件（业务逻辑），主进程（如配置文件）不会被重启。
+     */
+    public function reload()
+    {
+        $path = EASYSWOOLE_ROOT;
+        exec("cd {$path} && php easyswoole server reload >> {$path}/Log/swoole.log &");
     }
 
     /**
@@ -32,7 +42,7 @@ class PlugsServerHelper extends Server
     public function restart()
     {
         $path = EASYSWOOLE_ROOT;
-        exec("cd {$path} && ./restart_shell > {$path}/restart.log &");
+        exec("cd {$path} && ./restart_shell >> {$path}/Log/swoole.log &");
     }
 
 
