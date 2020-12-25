@@ -23,7 +23,8 @@ class PlugsServerHelper extends Server
      */
     public function stop()
     {
-
+        $path = EASYSWOOLE_ROOT;
+        exec("cd {$path} && php easyswoole server stop >> {$path}/Log/swoole.log &");
     }
 
     /**
@@ -32,7 +33,7 @@ class PlugsServerHelper extends Server
     public function reload()
     {
         $path = EASYSWOOLE_ROOT;
-        exec("cd {$path} && php easyswoole server reload > {$path}/reload.log &");
+        exec("cd {$path} && php easyswoole server reload >> {$path}/Log/swoole.log &");
     }
 
     /**
@@ -41,7 +42,7 @@ class PlugsServerHelper extends Server
     public function restart()
     {
         $path = EASYSWOOLE_ROOT;
-        exec("cd {$path} && ./restart_shell > {$path}/restart.log &");
+        exec("cd {$path} && ./restart_shell >> {$path}/Log/swoole.log &");
     }
 
 
