@@ -103,6 +103,7 @@ class PlugsRouterHelper
         $mirateFileDir = EASYSWOOLE_ROOT."/public/nepadmin/views/{$plugsName}";
 
         $fileList = File::scanDirectory($fullFileDir);
+        if (!$fileList['files']) return ;
         foreach ( $fileList['files'] as $file ){
             if (!is_dir($fullFileDir)) File::createDirectory($fullFileDir);
             $realyFileName = str_replace($fullFileDir, "", $file);
