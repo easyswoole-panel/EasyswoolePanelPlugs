@@ -87,7 +87,7 @@
                     var html='';
                     list = {};
                     $.each(data,function(i){
-                        list[data[i].plugs_name] = i;
+                        list[data[i].plugs_name] = data[i];
                         html+=' <div class="layui-col-xs6 layui-col-sm3 layui-col-cm2 layui-col-lg2  " > <div class="layui-card apply-card" style="text-align: center">\n' +
                             '<img src="'+data[i].logo+'"class="apply-logo">\n' +
                             '<p class="apply-title"> '+data[i].name+' '+ data[i].installed_version+'</p>\n' +
@@ -96,7 +96,7 @@
 
                         html+= '<span class="layui-badge layui-bg-green apply-detail" data-id="'+data[i].plugs_name+'">详情</span> ' ;
                         if(data[i].installed==true){
-                            html+= '<span class="layui-badge view-home" data-id="'+data[i].plugs_name+'">主页</span> <br/>' ;
+                            html+= '<span class="layui-badge apply-home" data-id="'+data[i].plugs_name+'">主页</span> <br/>' ;
                             html+= '<span class="layui-badge layui-bg-6ab3b0 apply-update" data-id="'+data[i].plugs_name+'">更新</span> ' ;
                             html+='<span class="layui-badge layui-bg-gray apply-uninstall" data-id="'+data[i].plugs_name+'">卸载</span>\n';
                         }else{
@@ -131,10 +131,17 @@
             });
         }
 
-        view.on('click','.view-home',function () {
+        view.on('click','.apply-home',function () {
             var id =$(this).attr('data-id')
             let info = list[id];
-            // todo 读取内部配置，是打开新页面到主页还是后台嵌套页
+            // 读取内部配置，是打开新页面到主页还是后台嵌套页
+            if ( !info.home ) layer.msg("has not config for home page");
+
+            if (info.home.type === 0){
+                admin.navigate(info.home.url);
+            }else{
+                window.open(info.home.url);
+            }
         })
         //安装应用
         view.on('click','.apply-install',function (e) {

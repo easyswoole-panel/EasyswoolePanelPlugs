@@ -57,4 +57,23 @@ class PlugsInitialization
         }
 
     }
+
+
+
+    public static function initAutoload()
+    {
+        spl_autoload_register(function($className){
+            $temp = explode("\\", $className);
+            $plugsName = array_shift($temp)."/".array_shift($temp);
+            if (PlugsAuthService::isPlugs($plugsName, true)){
+                // 自动把这个命名空间到文件加载进来
+                $tempPath = implode("/", $temp);
+                $tempPath .= ".php";
+                $filePath = EASYSWOOLE_ROOT."/Addons/{$plugsName}/src/{$tempPath}";
+                if (is_file($filePath)){
+                    require_once $filePath;
+                }
+            }
+        });
+    }
 }
