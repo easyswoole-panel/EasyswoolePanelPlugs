@@ -25,53 +25,6 @@ class PlugsRouterHelper
     use Singleton;
 
     /**
-     * 动态注入路由
-     * @param $array
-     * @param null $callable
-     * @return bool
-     */
-    public function addGetRouter($array, $callable = null)
-    {
-        $router = PlugsContain::$router;
-        $routeCollector = $router->getRouteCollector();
-
-        // 兼容注入单条 字符
-        if (!is_array($array)){
-            $routeCollector->addRoute(["GET"], $array, $callable);
-            return true;
-        }
-
-        foreach ($array as $key => $runner){
-            $routeCollector->addRoute(["GET"], $key, function(Request $request, Response $response) use($runner){
-                DispatcherPlugs::getInstance()->run($runner[0], $runner[1],$request, $response);
-            });
-        }
-        return true;
-    }
-
-    /**
-     * 动态注入路由 GET POST
-     * @param string|array $array
-     * @param null $callable 处理回调
-     * @param AbstractRouter $router
-     */
-    public function addAnyRouter($array, $callable = null)
-    {
-        $router = PlugsContain::$router;
-        $routeCollector = $router->getRouteCollector();
-        // 兼容注入单条 字符
-        if (!is_array($array)){
-            return $routeCollector->addRoute(["GET", "POST"], $array, $callable);
-        }
-
-        foreach ($array as $key => $runner){
-            $routeCollector->addRoute(["GET", "POST"], $key, function(Request $request, Response $response) use($runner){
-                DispatcherPlugs::getInstance()->run($runner[0], $runner[1],$request, $response);
-            });
-        }
-    }
-
-    /**
      * 迁移包内view文件到前端public中
      * @param $file
      */

@@ -5,6 +5,10 @@ namespace Siam\Plugs;
 
 use EasySwoole\Component\TableManager;
 use EasySwoole\EasySwoole\ServerManager;
+use EasySwoole\Http\Request;
+use EasySwoole\Http\Response;
+use FastRoute\RouteCollector;
+use Siam\Plugs\common\DispatcherPlugs;
 use Siam\Plugs\common\PlugsContain;
 use Siam\Plugs\common\PlugsRouterHelper;
 use Siam\Plugs\controller\Plugs;
@@ -47,11 +51,8 @@ class PlugsInitialization
                 require_once $initializationFilePath;
             }
         }
-
     }
-
-
-
+    
     public static function initAutoload()
     {
         spl_autoload_register(function($className){
@@ -67,5 +68,30 @@ class PlugsInitialization
                 }
             }
         });
+    }
+
+    /**
+     * @param RouteCollector $routeCollector
+     * @return RouteCollector
+     */
+    public static function initRouter(RouteCollector $routeCollector)
+    {
+        $plugsList = PlugsAuthService::getAllPlugs(true);
+        $routerArray = [];
+        foreach ($plugsList as $plug){
+            if (!is_file($plug['plugs_path']."/src/Router.php")) continue;
+            $plugsRouter = require_once $plug['plugs_path']."/src/Router.php";
+            if ( is_array($plugsRouter) ){
+                $routerArray = array_merge($routerArray, $plugsRouter);
+            }
+        }
+        foreach ($routerArray as $routePath => $routerInfo ){
+            $runner = $routerInfo[1];
+            $routeCollector->addRoute($routerInfo[0], $routePath, function(Request $request, Response $response) use($runner){
+                DispatcherPlugs::getInstance()->run($runner[0], $runner[1],$request, $response);
+            });
+        }
+
+        return $routeCollector;
     }
 }
