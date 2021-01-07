@@ -76,19 +76,19 @@ class PlugsAuthService
             if (PlugsAuthService::isPlugs($vendorName)){
                 $temp = PlugsAuthService::getPlugsConfig($vendorName);
                 $info = PlugsInstalledModel::create()->getByPlugsName($vendorName);
-                if ($installed && !!$info){
-                    $temp['installed'] = !!$info;
-                    $temp['installed_version'] = !!$info ? $info->plugs_version : null;
-                    $temp['plugs_name'] = $vendorName;
 
-                    $return[] = $temp;
-                }else{
-                    $temp['installed'] = !!$info;
-                    $temp['installed_version'] = !!$info ? $info->plugs_version : null;
-                    $temp['plugs_name'] = $vendorName;
 
-                    $return[] = $temp;
+                if ($installed){
+                    if (!$info){
+                        continue;
+                    }
                 }
+
+                $temp['installed'] = !!$info;
+                $temp['installed_version'] = !!$info ? $info->plugs_version : null;
+                $temp['plugs_name'] = $vendorName;
+
+                $return[] = $temp;
             }
         }
         // addons dir
@@ -100,19 +100,18 @@ class PlugsAuthService
             if (PlugsAuthService::isPlugs($vendorName, true)){
                 $temp = PlugsAuthService::getPlugsConfig($vendorName);
                 $info = PlugsInstalledModel::create()->getByPlugsName($vendorName);
-                if ($installed && !!$info){
-                    $temp['installed'] = !!$info;
-                    $temp['installed_version'] = !!$info ? $info->plugs_version : null;
-                    $temp['plugs_name'] = $vendorName;
 
-                    $return[] = $temp;
-                }else{
-                    $temp['installed'] = !!$info;
-                    $temp['installed_version'] = !!$info ? $info->plugs_version : null;
-                    $temp['plugs_name'] = $vendorName;
-
-                    $return[] = $temp;
+                if ($installed){
+                    if (!$info){
+                        continue;
+                    }
                 }
+
+                $temp['installed'] = !!$info;
+                $temp['installed_version'] = !!$info ? $info->plugs_version : null;
+                $temp['plugs_name'] = $vendorName;
+
+                $return[] = $temp;
             }
         }
 
