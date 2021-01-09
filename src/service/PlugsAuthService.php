@@ -114,6 +114,18 @@ class PlugsAuthService
                 $return[] = $temp;
             }
         }
+        // 兼容第一次安装更新
+        if (empty($return)){
+            $temp = PlugsAuthService::getPlugsConfig("siam/plugs");
+            $temp['installed'] = false;
+            $temp['installed_version'] = "";
+            $temp['plugs_name'] = "siam/plugs";
+
+            $return[] = $temp;
+            // 执行安装
+            PlugsInstallService::install("siam/plugs", true);
+            PlugsInstalledModel::create()->updateVersionByName("siam/plugs", $temp['version'] ?? "1.0");
+        }
 
         return $return;
     }

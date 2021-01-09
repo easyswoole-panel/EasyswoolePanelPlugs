@@ -34,7 +34,7 @@ class PlugsInstallService
         }else{
             $installFileList = static::getInstallFIle($plugsName);
         }
-        if ($installFileList === []) return false;
+        if ($installFileList === []) return true;
         
         foreach ($installFileList as $installFile){
             // run install
