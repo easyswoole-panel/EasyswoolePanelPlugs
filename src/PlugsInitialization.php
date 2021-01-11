@@ -57,14 +57,23 @@ class PlugsInitialization
     {
         spl_autoload_register(function($className){
             $temp = explode("\\", $className);
-            $plugsName = array_shift($temp)."/".array_shift($temp);
+            
+            $vendorName = array_shift($temp);
+            $packName   = array_shift($temp);
+            
+            $packName   = (new \EasySwoole\Spl\SplString($packName))->snake()->replace("_", "-")->__toString();
+            $vendorName = (new \EasySwoole\Spl\SplString($vendorName))->snake()->replace("_", "-")->__toString();
+            $plugsName  = $vendorName."/".$packName;
+            
             if (PlugsAuthService::isPlugs($plugsName, true)){
+                // 三种模式的包名 哪个文件存在就加载哪个
                 // 自动把这个命名空间到文件加载进来
                 $tempPath = implode("/", $temp);
                 $tempPath .= ".php";
                 $filePath = EASYSWOOLE_ROOT."/Addons/{$plugsName}/src/{$tempPath}";
                 if (is_file($filePath)){
                     require_once $filePath;
+                    return ;
                 }
             }
         });
