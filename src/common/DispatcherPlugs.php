@@ -36,5 +36,6 @@ class DispatcherPlugs
     {
         $response->withStatus(Status::CODE_INTERNAL_SERVER_ERROR);
         $response->write(nl2br($throwable->getMessage()."\n".$throwable->getTraceAsString()));
+        $response->end();
     }
 }
